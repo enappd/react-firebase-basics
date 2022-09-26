@@ -9,6 +9,7 @@ import {
 import Register from './screens/Register';
 import Home from './screens/Home';
 import Login from './screens/Login';
+import UpdateUser from './screens/Update';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/updateUser/:username" element={<UpdateUser />} />
         </Routes>
     </BrowserRouter>
     // use of component

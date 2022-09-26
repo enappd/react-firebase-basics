@@ -2,35 +2,38 @@ import React, { useEffect, useState } from "react";
 import Table from 'react-bootstrap/Table';
 import { db } from '../firebase';
 import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+    const navigate = useNavigate();
     const [userList, setUserList] = useState([]);
 
     const deleteUser = async (user) => {
         console.log(user.username);
-        const q = query(collection(db, "users"), where("username", "==", user.username));
-        q.get().then(function(querySnapshot) {
-            querySnapshot.forEach(function(doc) {
-              doc.ref.delete();
-            });
-          });
+        const docRef = doc(db, "users", user.username);
+        deleteDoc(docRef).then(() => {
+            getUsersData();
+            alert('User deleted');
+        });
     };
 
     const updateUser = (user) => {
         console.log(user.username);
+        navigate(`/updateUser/${user.username}`);
     };
 
+    const getUsersData = async () => {
+        const users = [];
+        const snap = await getDocs(collection(db, "users"));
+        snap.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+            
+            users.push({...doc.data(), createdDate: `${new Date(doc.data().createdAt.seconds*1000)}`});
+        })
+        setUserList(users);
+    };
     useEffect(() => {
-        const getUsersData = async () => {
-            const users = [];
-            const snap = await getDocs(collection(db, "users"));
-            snap.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
-                
-                users.push({...doc.data(), createdDate: `${new Date(doc.data().createdAt.seconds*1000)}`});
-            })
-            setUserList(users);
-        };
+        
         getUsersData();
     }, []);
     return (

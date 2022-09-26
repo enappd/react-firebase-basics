@@ -16,7 +16,7 @@ function Register() {
         createUserWithEmailAndPassword(auth, username, password)
         .then(async (userCredential) => {
             const user = userCredential.user;
-            const userRef = doc(collection(db, "users"));
+            const userRef = doc(db, "users", username);
             await setDoc(userRef, {username: username, password: password, createdAt: new Date()});
             navigate('/home');
             console.log(user);
