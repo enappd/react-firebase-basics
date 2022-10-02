@@ -22,7 +22,7 @@ export default function SocialLogin() {
 
   const navigateWithUserData = (userData) => {
     console.log('data', userData);
-    // navigate('/home', {state: userData});
+    navigate('/home', {state: {name: userData.displayName, email: userData.email, photo: userData.photoURL}});
   };
 
   const googleLogin = (e) => {
@@ -32,7 +32,7 @@ export default function SocialLogin() {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
-      navigateWithUserData({userData: user, type: 'google'});
+      navigateWithUserData(user);
       console.log('User', user);
     }).catch((err) => {
       console.log(err);
@@ -48,7 +48,7 @@ export default function SocialLogin() {
       const user = result.user;
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const accessToken = credential.accessToken;
-      navigateWithUserData({userData: user, type: 'facebook'});
+      navigateWithUserData(user);
       console.log('User', user);
     }).catch((err) => {
       console.log(err);
@@ -64,7 +64,7 @@ export default function SocialLogin() {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
-      navigateWithUserData({userData: user, type: 'github'});
+      navigateWithUserData(user);
       console.log('User', user);
     }).catch((err) => {
       console.log(err);
@@ -83,7 +83,7 @@ export default function SocialLogin() {
         confirmationResult.confirm(code).then((result) => {
           const user = result.user;
           console.log(user);
-          navigateWithUserData({userData: user, type: 'phone'});
+          navigateWithUserData({displayName: null, email: phoneNumber, photoURL: null});
         }).catch((err) => {
           console.log(err);
           alert('Error while github login');
@@ -104,7 +104,7 @@ export default function SocialLogin() {
     signInAnonymously(auth)
     .then(() => {
       console.log('Anonymous login')
-      navigateWithUserData({userData: 'Anonymous user', type: 'anonymous'});
+      navigateWithUserData({displayName: null, email: 'Anonymous', photoURL: null});
     })
     .catch((err) => {
       console.log(err);
